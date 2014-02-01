@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "A service to keep a read-only CouchDB replica up to date",
   "main": "replica.js",
+  "bin": "bin/replica.js",
   "directories": {
     "test": "test"
   },
