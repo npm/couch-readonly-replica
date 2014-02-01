@@ -1,0 +1,30 @@
+{
+  "name": "couch-readonly-replica",
+  "version": "0.0.0",
+  "description": "A service to keep a read-only CouchDB replica up to date",
+  "main": "replica.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/npm/couch-read-replica"
+  },
+  "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/npm/couch-read-replica/issues"
+  },
+  "homepage": "https://github.com/npm/couch-read-replica",
+  "dependencies": {
+    "follow": "~0.10.4",
+    "parse-json-response": "~1.0.1"
+  },
+  "devDependencies": {
+    "tap": "~0.4.8",
+    "rimraf": "~2.2.2"
+  }
+}
