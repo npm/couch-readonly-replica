@@ -62,8 +62,6 @@ usage: couch-readonly-replica [args]
 */
 }
 
-console.error(opts)
-
 try {
   var r = new Replica({
     seqFile: opts.seq_file,
@@ -85,11 +83,11 @@ r.on('error', function(er) {
   console.error(er)
   throw er
 }).on('change', function(c) {
-  console.error('%d %s/%s', c.seq, c.db, c.id)
+  console.log('%d %s/%s', c.seq, c.db, c.id)
 }).on('delete', function(c) {
-  console.error('%d DELETE %s/%s', c.seq, c.db, c.id)
+  console.log('%d DELETE %s/%s', c.seq, c.db, c.id)
 }).on('put', function(c) {
-  console.error('%d PUT %s/%s', c.seq, c.db, c.id)
+  console.log('%d PUT %s/%s', c.seq, c.db, c.id)
 }).on('rsync', function(out, er) {
   // meh.
 })
