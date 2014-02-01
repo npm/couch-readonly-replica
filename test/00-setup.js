@@ -8,6 +8,7 @@ var fs = require('fs')
 var http = require('http')
 var url = require('url')
 var parse = require('parse-json-response')
+var mkdirp = require('mkdirp')
 
 // just in case it was still alive from a previous run, kill it.
 require('./zz-teardown.js')
@@ -25,7 +26,12 @@ var started = /Apache CouchDB has started on http:\/\/127\.0\.0\.1:1598[45]\/\n$
 function startCouch (n, t) {
   var pidfile = pid + '-' + n
   var logfile = log + '-' + n
-  var conffile = conf + '-' + n
+  var confsrc = conf + '-' + n
+  var couchdir = path.resolve(__dirname, 'fixtures', ''+n)
+  var conffile = path.resolve(__dirname, 'fixtures', ''+n, 'couch.ini')
+
+  mkdirp.sync(couchdir)
+  fs.writeFileSync(conffile, fs.readFileSync(confsrc))
 
   var fd = fs.openSync(pidfile, 'wx')
 
@@ -51,7 +57,7 @@ function startCouch (n, t) {
       if (Date.now() - start < 5000)
         return setTimeout(function () {
           fs.readFile(logfile, R)
-        }, 100)
+        }, 50)
       else
         throw er
     }
@@ -152,20 +158,48 @@ test('load view', function(t) {
   }
   http.get(u, function(res) {
     t.equal(res.statusCode, 200)
-    res.on('data', function(c) {
-      console.error('view data:'+ c)
-    })
-    res.on('end', function() {
-      console.error('res end')
-      setTimeout(t.end.bind(t), 1000)
-    })
+    t.end()
   })
 })
 
 test('verify that view is there', function(t) {
-  setTimeout(function() {
-    fs.statSync(__dirname + '/fixtures/1/.registry_design/mrview/fb46477815586959b7e85bb7d76a1349.view')
-    t.pass('ok')
+  fs.statSync(__dirname + '/fixtures/1/.registry_design/mrview/fb46477815586959b7e85bb7d76a1349.view')
+  t.pass('ok')
+  t.end()
+})
+
+test('normalize path 1', function(t) {
+  var p = 'http://admin:admin@localhost:15984/_config/couchdb/view_index_dir'
+  p = url.parse(p)
+  p.method = 'PUT'
+  var body = JSON.stringify(path.resolve(__dirname + "/fixtures/1"))
+  p.headers = {
+    'content-length': body.length,
+    'content-type': 'application/json',
+    connection: 'close'
+  }
+  var req = http.request(p)
+  req.end(body)
+  req.on('response', function(res) {
+    t.equal(res.statusCode, 200)
+    t.end()
+  })
+})
+
+test('normalize path 2', function(t) {
+  var p = 'http://admin:admin@localhost:15985/_config/couchdb/view_index_dir'
+  p = url.parse(p)
+  p.method = 'PUT'
+  var body = JSON.stringify(path.resolve(__dirname + "/fixtures/2"))
+  p.headers = {
+    'content-length': body.length,
+    'content-type': 'application/json',
+    connection: 'close'
+  }
+  var req = http.request(p)
+  req.end(body)
+  req.on('response', function(res) {
+    t.equal(res.statusCode, 200)
     t.end()
   })
 })

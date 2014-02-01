@@ -8,6 +8,8 @@ var pid = path.resolve(__dirname, 'fixtures', 'pid')
 var log = path.resolve(__dirname, 'fixtures', 'couch.log')
 var db = path.resolve(__dirname, 'fixtures')
 var rimraf = require('rimraf')
+var url = require('url')
+var http = require('http')
 
 function clean(n, t) {
   var pidfile = pid + '-' + n
