@@ -23,7 +23,7 @@ test('basic', function(t) {
     if (expect[k] === 0)
       delete expect[k]
 
-    if (Object.keys(expect).length === 1) {
+    if (Object.keys(expect).length === 0) {
       r.destroy()
       t.end()
     }

@@ -242,7 +242,6 @@ Replica.prototype.onDocPut = function(change, er, data, res) {
 
 Replica.prototype.done = function(change) {
   var sf = this.seqFiles[change.db]
-  console.error('done, save it', sf)
   if (change.seq > sf)
     sf.seq = change.seq
   if (!this.pending[change.db])
