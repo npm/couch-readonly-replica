@@ -221,10 +221,10 @@ Replica.prototype.onDocGet = function(change, res) {
   var p = change.db + '/' + change.id + '?new_edits=false'
   var r = url.parse(this.localCouch.href + p)
   r.headers = {
-    'content-encoding': res.headers['content-encoding'],
-    'content-type': res.headers['content-type'],
-    'content-length': res.headers['content-length'],
-    'user-agent': this.ua
+    'content-encoding': res.headers['content-encoding'] || '',
+    'content-type': res.headers['content-type'] || '',
+    'content-length': res.headers['content-length'] || '',
+    'user-agent': this.u || '',
   }
   r.method = 'PUT'
   var req = hh.request(r, parse(this.onDocPut.bind(this, change)))
